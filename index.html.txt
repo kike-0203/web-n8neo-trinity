@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu Ayudante Robot | Agentes Inteligentes para Empresas</title>
+  <meta name="description" content="Creamos agentes de inteligencia artificial para ventas, atención al cliente y automatización de procesos." />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121932;
+      --card: rgba(255,255,255,0.06);
+      --line: rgba(255,255,255,0.12);
+      --text: #f5f7fb;
+      --muted: #aeb8d0;
+      --accent: #25D366;
+      --accent-2: #128C7E;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 20px;
+      --max: 1150px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37,211,102,0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(126,231,135,0.12), transparent 25%),
+        linear-gradient(180deg, #0a0f1d 0%, #0d1326 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(100% - 2rem, var(--max));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(10, 15, 29, 0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #08111f;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .95rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform .18s ease, opacity .18s ease, border-color .18s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #5af08a);
+      color: #07111e;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 4.5rem 0 3rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .9fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem .85rem;
+      border-radius: 999px;
+      background: rgba(37,211,102,0.12);
+      border: 1px solid rgba(37,211,102,0.24);
+      color: #d9ffe9;
+      font-size: .92rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.8rem);
+      line-height: .98;
+      margin: 0 0 1rem;
+      letter-spacing: -1.8px;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      max-width: 62ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .85rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .mini-proof {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .dashboard {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .dash-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .metric, .chat-card, .flow-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 1rem;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.9rem;
+      margin-bottom: .3rem;
+    }
+
+    .metric span, .flow-card p, .chat-card p {
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .chat-bubble {
+      margin-top: .8rem;
+      padding: .9rem 1rem;
+      border-radius: 16px;
+      font-size: .95rem;
+      line-height: 1.55;
+      width: fit-content;
+      max-width: 92%;
+    }
+
+    .bubble-user {
+      background: rgba(37,211,102,0.18);
+      margin-left: auto;
+    }
+
+    .bubble-bot {
+      background: rgba(126,231,135,0.14);
+      border: 1px solid rgba(126,231,135,0.16);
+    }
+
+    section {
+      padding: 2rem 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-head h2 {
+      margin: 0 0 .8rem;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      letter-spacing: -1px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(37,211,102,0.12);
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    .card h3 {
+      margin: 0 0 .7rem;
+      font-size: 1.15rem;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .card ul {
+      padding-left: 1.1rem;
+      margin: .6rem 0 0;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .step-number {
+      font-size: .95rem;
+      color: #7ff0a6;
+      font-weight: 800;
+      margin-bottom: .8rem;
+      letter-spacing: .3px;
+    }
+
+    .faq {
+      display: grid;
+      gap: .85rem;
+    }
+
+    details {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1rem 1rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    details p { color: var(--muted); line-height: 1.7; margin: .9rem 0 0; }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .contact-panel {
+      min-height: 100%;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: .8rem;
+      margin-top: 1rem;
+    }
+
+    .contact-item {
+      padding: .9rem 1rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+    }
+
+    form {
+      display: grid;
+      gap: .85rem;
+    }
+
+    label {
+      font-size: .95rem;
+      color: #d8e0f0;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin-top: .35rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: .95rem 1rem;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: rgba(37,211,102,0.6);
+      box-shadow: 0 0 0 4px rgba(37,211,102,0.12);
+    }
+
+    textarea { min-height: 130px; resize: vertical; }
+
+    .footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .contact,
+      .steps,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      h1 { max-width: 12ch; }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding-top: 3rem; }
+      .btn { width: 100%; }
+      .hero-actions { flex-direction: column; }
+      .mini-proof { flex-direction: column; gap: .45rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#inicio" class="brand">
+        <span class="brand-badge">TR</span>
+        <span>Tu Ayudante Robot</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#servicios">Servicios</a>
+        <a href="#casos">Casos de uso</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contacto" class="btn btn-secondary">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="reveal visible">
+          <div class="eyebrow">⚡ WhatsApp, ventas y atención automática</div>
+          <h1>Convierte más prospectos y responde clientes 24/7 con agentes de IA</h1>
+          <p>
+            En <strong>Tu Ayudante Robot</strong> diseñamos agentes inteligentes para WhatsApp, atención al cliente, seguimiento de leads y automatización operativa.
+            Ayudamos a negocios a responder más rápido, vender más y perder menos oportunidades.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/5215517178656?text=Hola%2C%20quiero%20automatizar%20mi%20negocio%20con%20IA" target="_blank" rel="noopener noreferrer">Hablar por WhatsApp</a>
+            <a class="btn btn-secondary" href="#servicios">Ver servicios</a>
+          </div>
+
+          <div class="mini-proof">
+            <span>✓ Más velocidad de respuesta</span>
+            <span>✓ Más seguimiento a prospectos</span>
+            <span>✓ Menos oportunidades perdidas</span>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <div class="dashboard">
+            <div class="dash-row">
+              <div class="metric">
+                <strong>24/7</strong>
+                <span>Tu negocio responde clientes incluso cuando tú no estás frente al teléfono.</span>
+              </div>
+              <div class="metric">
+                <strong>+Leads</strong>
+                <span>Seguimiento automático para que los prospectos no se enfríen ni se pierdan en el camino.</span>
+              </div>
+            </div>
+
+            <div class="chat-card">
+              <strong>Agente de ventas</strong>
+              <div class="chat-bubble bubble-user">Hola, quiero más clientes por WhatsApp para mi negocio.</div>
+              <div class="chat-bubble bubble-bot">Perfecto. Podemos automatizar respuestas, calificar prospectos y agendar seguimientos para vender más sin saturar tu equipo.</div>
+            </div>
+
+            <div class="flow-card">
+              <strong>Flujo que vende</strong>
+              <p>WhatsApp → Respuesta inmediata → Calificación → Seguimiento → Cita o venta</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Servicios enfocados en resultados, no en promesas vacías</h2>
+          <p>
+            Creamos sistemas conversacionales que te ayudan a captar leads, responder al instante y automatizar procesos para que tu negocio avance con menos fricción y más cierres.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card reveal">
+            <div class="card-icon">💬</div>
+            <h3>Atención al cliente automática</h3>
+            <p>Responde preguntas frecuentes, captura datos y atiende clientes en segundos para mejorar la experiencia y reducir tiempos de espera.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">📈</div>
+            <h3>Seguimiento de prospectos y ventas</h3>
+            <p>Califica leads, da seguimiento automático y empuja la conversación hasta la cita, la llamada o la compra.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon">⚙️</div>
+            <h3>Automatización para WhatsApp y operación</h3>
+            <p>Conectamos tus agentes con WhatsApp, CRM, formularios, correo y procesos internos para que todo fluya sin perseguir tareas manuales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="casos">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Casos de uso que ayudan a vender desde la primera visita</h2>
+          <p>Cuando tu prospecto se reconoce en el problema, la conversación cambia. Aquí es donde tu web empieza a trabajar como vendedor silencioso.</p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card reveal">
+            <h3>Clínicas y consultorios</h3>
+            <ul>
+              <li>Respuestas automáticas para pacientes</li>
+              <li>Confirmación de citas</li>
+              <li>Filtro de preguntas frecuentes</li>
+            </ul>
+          </article>
+
+          <article class="card reveal">
+            <h3>Inmobiliarias</h3>
+            <ul>
+              <li>Calificación de leads</li>
+              <li>Agenda de visitas</li>
+              <li>Seguimiento por WhatsApp</li>
+            </ul>
+          </article>
+
+          <article class="card reveal">
+            <h3>Ecommerce y servicios</h3>
+            <ul>
+              <li>Atención postventa</li>
+              <li>Recuperación de prospectos</li>
+              <li>Integración con formularios y CRM</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="proceso">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Así convertimos procesos lentos en ventas más rápidas</h2>
+          <p>Un proceso claro reduce dudas, acelera decisiones y transmite que sabes exactamente cómo llevar un proyecto a resultados.</p>
+        </div>
+
+        <div class="steps">
+          <article class="card reveal">
+            <div class="step-number">01</div>
+            <h3>Diagnóstico</h3>
+            <p>Revisamos tu proceso actual, detectamos fricciones y definimos oportunidades de automatización.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="step-number">02</div>
+            <h3>Diseño del agente</h3>
+            <p>Diseñamos el flujo conversacional, las reglas y la conexión con tus herramientas.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="step-number">03</div>
+            <h3>Implementación</h3>
+            <p>Configuramos el agente, probamos escenarios reales y afinamos la experiencia.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="step-number">04</div>
+            <h3>Optimización</h3>
+            <p>Medimos resultados, ajustamos respuestas y buscamos mejoras continuas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Preguntas frecuentes antes de empezar</h2>
+          <p>Estas respuestas bajan objeciones y hacen más fácil que el visitante te escriba con intención real de compra.</p>
+        </div>
+
+        <div class="faq">
+          <details class="reveal">
+            <summary>¿Cuánto tarda una implementación?</summary>
+            <p>Depende del alcance. Un agente sencillo puede estar listo en pocos días; una solución con varias integraciones tarda más.</p>
+          </details>
+
+          <details class="reveal">
+            <summary>¿Se puede integrar con WhatsApp y CRM?</summary>
+            <p>Sí. Podemos conectar el agente con WhatsApp, formularios, correo, CRM y otras herramientas de tu operación.</p>
+          </details>
+
+          <details class="reveal">
+            <summary>¿Esto reemplaza a mi equipo de ventas o atención?</summary>
+            <p>No. El objetivo es que tu equipo deje de gastar tiempo en lo repetitivo y se enfoque en cerrar ventas, atender casos clave y hacer crecer el negocio.</p>
+          </details>
+
+          <details class="reveal">
+            <summary>¿La solución se adapta a mi negocio?</summary>
+            <p>Sí. Diseñamos cada agente según tu tipo de cliente, tu proceso comercial y tus herramientas actuales para que realmente te ayude a vender y operar mejor.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="container contact">
+        <div class="card contact-panel reveal">
+          <div class="section-head" style="margin-bottom:0;">
+            <h2>Haz que tu negocio responda más rápido y venda mejor</h2>
+            <p>Si hoy pierdes prospectos por tardanza, falta de seguimiento o carga operativa, podemos ayudarte a convertir ese caos en un sistema que trabaja por ti.</p>
+          </div>
+
+          <div class="contact-list">
+            <div class="contact-item"><strong>WhatsApp:</strong> +52 1 5517 178656</div>
+            <div class="contact-item"><strong>Email:</strong> contacto@tuagenciaia.com</div>
+            <div class="contact-item"><strong>Ubicación:</strong> México</div>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <form id="contactForm">
+            <label>
+              Nombre
+              <input type="text" name="nombre" placeholder="Tu nombre" required />
+            </label>
+
+            <label>
+              Email
+              <input type="email" name="email" placeholder="tunombre@correo.com" required />
+            </label>
+
+            <label>
+              Cuéntanos qué necesitas
+              <textarea name="mensaje" placeholder="Quiero automatizar ventas, WhatsApp, soporte o seguimiento..."></textarea>
+            </label>
+
+            <button class="btn btn-primary" type="submit">Quiero más información</button>
+            <small id="formMessage" style="color: var(--muted);"></small>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © <span id="year"></span> Tu Ayudante Robot. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (!el.classList.contains('visible')) observer.observe(el);
+    });
+
+    const form = document.getElementById('contactForm');
+    const formMessage = document.getElementById('formMessage');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const nombre = data.get('nombre');
+      formMessage.textContent = `Gracias, ${nombre}. Este formulario está en modo demo. Después lo conectamos para que tus prospectos te contacten directo por WhatsApp o correo.`;
+      form.reset();
+    });
+  </script>
+  <a href="https://wa.me/5215517178656?text=Hola%2C%20quiero%20automatizar%20mi%20negocio%20con%20IA" target="_blank" style="position:fixed;bottom:20px;right:20px;background:#25D366;color:#08111f;padding:14px 18px;border-radius:999px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:999;text-decoration:none;">💬 WhatsApp</a>
+</body>
+</html>
